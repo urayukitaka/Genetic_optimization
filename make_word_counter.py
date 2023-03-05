@@ -54,9 +54,64 @@ def make_word_dict(test_names:list, word_dict:dict):
     return outwords
 
 
+def make_list_words(test_name:str, word_dict:dict):
+
+    # initialize output
+    out = []
+    v = test_name
+
+    while len(v)!=0:
+
+        # flag, cut off by dictionary
+        flg = 0
+
+        # reverse v
+        for i in reversed(range(2, len(v)+1)):
+            # if word from 1st, append to dictionary
+            if v[:i] in word_dict.keys():
+                out.append(v[:i])
+                # update v, backword of word
+                v = v[i:]
+                # flg
+                flg = 1
+
+        # if flag is 1, go to next loop
+        if flg==1:
+            pass
+        else:
+            # if whole v is in dictionary, append to dict and break
+            if v in word_dict.keys():
+                out.append(v)
+                break
+            # elif v is not in dictionary, and data is exist, append 1st word and update to backword of wrod
+            elif (v not in word_dict.keys()) & (len(v)!=0):
+                out = out + list(v[0])
+                v = v[1:]
+            elif len(v)==0:
+                break
+
+    return out
+
+
+＃ for debug
 if __name__ == "__main__":
 
     # test names
     test_names = c.name
 
     # make 1st dict
+    dict1st = initial_word_dict(test_names=test_names)
+    # 2nd dict
+    dict2nd = make_word_dict(test_names=test_names, word_dict=dict1st)
+
+    # word dict
+    word_dict = dict1st | dict2nd
+
+    print("Result of word dict")
+    print(word_dict)
+    print("")
+
+    # make list of word
+    word_lists = [make_list_words(test_name=test_name, word_dict=word_dict) for test_name in test_names]
+    print("Result of word list")
+    print(word_lists)
